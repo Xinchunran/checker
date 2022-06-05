@@ -1,19 +1,27 @@
 #!/usr/bin/env python
+from __future__ import print_function
+from Bio import SeqIO
+from Bio.Seq import Seq
+from collections import OrderedDict
+import sys
+import argparse
 import os
-import pymol
-from pymol import cmd
-
 
 def get_args():
-    desc = "generate mutation with pymol."
+    desc = "checker for the mutation if the mutation is the same."
     try:
         parser = argparse.ArgumentParser(
             description=desc, formatter_class=argparse.RawTextHelpFormatter
         )
         parser.add_argument(
-            "pdbfile",
+            "pdbfile1",
             action="store",
             help="File of original structures (pdb only).",
+        )
+        parser.add_argument(
+            "pdbfile2",
+            action="store",
+            help="File of structures to be mutated (pdb only).",
         )
         parser.add_argument(
             "mutation_file",
@@ -77,9 +85,6 @@ def parse_mapfile(mapfile: str):
         )
         assert v[-1].isalpha(), (
             "Last character of mutation map is not a valid letter. Got: %s" % v[-1]
-        )
-        assert v[1:-1].isdigit(), (
-            "Location string of mutation map is not a valid number. Got: %s" % v[1:-1]
         )
 
     return mut_dict
